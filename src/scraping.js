@@ -1,17 +1,9 @@
-/**
- * site: https://rn.olx.com.br/rio-grande-do-norte/natal?q=iphone
- * nome
- * valor
- * data de divulgação
- * código
- * link
- */
-
 const axios = require('axios');
 const cheerio = require('cheerio');
 const fs = require('fs');
 
-const siteAlvo = 'https://rn.olx.com.br/rio-grande-do-norte/natal?q=iphone';
+// const siteAlvo = 'https://rn.olx.com.br/rio-grande-do-norte/natal?q=iphone';
+const siteAlvo = 'https://rn.olx.com.br/rio-grande-do-norte/natal?q=onix%20plus';
 
 const dados = [];
 
@@ -31,8 +23,8 @@ const listaLinks = async () => {
     $('.sc-12rk7z2-1.huFwya.sc-giadOv.dXANPZ').each(function(i, link) {
         dados[i] = $(link).attr('href');
     });
+    console.log('Total:', dados.length);
     return dados;
-    // console.log(dados);
 };
 
 const coletaDdos = async (pg) => {
@@ -41,10 +33,10 @@ const coletaDdos = async (pg) => {
         const htmlDados = resultado.data;
         const $ = await cheerio.load(htmlDados);
 
-        let nomeProduto = $('#content > div.sc-18p038x-2.cMWwWm > div > div.sc-bwzfXH.h3us20-0.cBfPri > div.duvuxf-0.h3us20-0.gyKyRK > div.h3us20-6.UxTCE > div > div > h1').text();
-        let valor = $('#content > div.sc-18p038x-2.cMWwWm > div > div.sc-bwzfXH.h3us20-0.cBfPri > div.duvuxf-0.h3us20-0.cpscHx > div.h3us20-6.jUPCvE > div > div > div.sc-hmzhuo.dtdGqP.sc-jTzLTM.iwtnNi > div.sc-hmzhuo.sc-12l420o-0.kUWFYY.sc-jTzLTM.iwtnNi > h2.sc-ifAKCX.eQLrcK').text();
-        let publicacao = $('#content > div.sc-18p038x-2.cMWwWm > div > div.sc-bwzfXH.h3us20-0.cBfPri > div.duvuxf-0.h3us20-0.gyKyRK > div.h3us20-6.hzUJDA > div > div > div > span.sc-1oq8jzc-0.jvuXUB.sc-ifAKCX.fizSrB').text();
-        let codigo = $('#content > div.sc-18p038x-2.cMWwWm > div > div.sc-bwzfXH.h3us20-0.cBfPri > div.duvuxf-0.h3us20-0.gyKyRK > div.h3us20-6.hzUJDA > div > div > div > span.sc-16iz3i7-0.qJvUT.sc-ifAKCX.fizSrB').text();
+        let nomeProduto = $('#content > div.ad__sc-18p038x-2.djeeke > div > div.sc-bwzfXH.ad__h3us20-0.ikHgMx > div.ad__duvuxf-0.ad__h3us20-0.eCUDNu > div.ad__h3us20-6.iFvUie > div > div > div > div > h1').text(); 
+        let valor = 'R$ ' + $('.sc-ifAKCX.eQLrcK').text();
+        let publicacao = $('#content > div.ad__sc-18p038x-2.djeeke > div > div.sc-bwzfXH.ad__h3us20-0.ikHgMx > div.ad__duvuxf-0.ad__h3us20-0.eCUDNu > div.ad__h3us20-6.hQCBiM > div > div > div > span.ad__sc-1oq8jzc-0.hSZkck.sc-ifAKCX.fizSrB').text();
+        let codigo = $('.ad__sc-16iz3i7-0.bTSFxO.sc-ifAKCX.fizSrB').text();
 
         const resFinal = `
             <h1>Produto: ${nomeProduto}</h1>
@@ -63,7 +55,7 @@ const coletaDdos = async (pg) => {
 };
 
 const gravaHtml = async (result) => {
-    fs.writeFileSync('./index.html', result, {flag: 'a+'}, function(err) {
+    fs.writeFileSync('./src/index.html', result, {flag: 'a+'}, function(err) {
         if (err) {
             console.log('Deu pau na geração do HTML: ', err);
         }
@@ -73,6 +65,7 @@ const gravaHtml = async (result) => {
 const apresentaDados = async () => {
     const todosLinks = await listaLinks();
     todosLinks.map((linksFilhos) => {
+        console.log(todosLinks.indexOf(linksFilhos) + 1);
         coletaDdos(linksFilhos);
     });
 };
