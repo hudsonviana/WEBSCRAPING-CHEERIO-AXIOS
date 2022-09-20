@@ -1,9 +1,3 @@
-/**
- * sendgrid.com
- * hudson.andrade@hotmail.com.br
- * res2131@sendgrid
- */
-
 const nodemailer = require('nodemailer');
 const sendgridTransport = require('nodemailer-sendgrid-transport');
 const fs = require('fs');
@@ -12,7 +6,7 @@ const transporter = nodemailer.createTransport(
     sendgridTransport({
         auth: {
             api_key:
-            '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'
+            ''
         }
     })
 );
