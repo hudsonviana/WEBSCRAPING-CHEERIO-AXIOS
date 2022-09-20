@@ -2,8 +2,7 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const fs = require('fs');
 
-// const siteAlvo = 'https://rn.olx.com.br/rio-grande-do-norte/natal?q=iphone';
-const siteAlvo = 'https://rn.olx.com.br/rio-grande-do-norte/natal?q=onix%20plus';
+const siteAlvo = 'https://rn.olx.com.br/rio-grande-do-norte/natal?q=celular';
 
 const dados = [];
 
